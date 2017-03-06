@@ -1,29 +1,12 @@
-/*
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-*/
-
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
-	"encoding/json"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
@@ -60,7 +43,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}
 
 	// Write the state to the ledger
-	err = stub.PutState("abc", []byte(strconv.Itoa(Aval)))				//making a test var "abc", I find it handy to read/write to it right away to test the network
+	err = stub.PutState("abc", []byte(strconv.Itoa(Aval))) //making a test var "abc", I find it handy to read/write to it right away to test the network
 	if err != nil {
 		return nil, err
 	}
@@ -83,15 +66,15 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-	if function == "init" {										//initialize the chaincode state, used as reset
+	if function == "init" { //initialize the chaincode state, used as reset
 		return t.Init(stub, "init", args)
-	} else if function == "add" {									//Adds a number to current value
+	} else if function == "add" { //Adds a number to current value
 		return t.add(stub, args)
-	} else if function == "subtract" {								//Subtracts a number from current value
+	} else if function == "subtract" { //Subtracts a number from current value
 		return t.subtract(stub, args)
 	}
 
-	fmt.Println("invoke did not find func: " + function)						//error
+	fmt.Println("invoke did not find func: " + function) //error
 
 	return nil, errors.New("Received unknown function invocation")
 }
@@ -103,10 +86,10 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "read" {													//read a variable
+	if function == "read" { //read a variable
 		return t.read(stub, args)
 	}
-	fmt.Println("query did not find func: " + function)						//error
+	fmt.Println("query did not find func: " + function) //error
 
 	return nil, errors.New("Received unknown function query")
 }
@@ -118,13 +101,13 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	var name, jsonResp string
 	var err error
 
-	valAsbytes, err := stub.GetState("abc")									//get the var from chaincode state
+	valAsbytes, err := stub.GetState("abc") //get the var from chaincode state
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + name + "\"}"
 		return nil, errors.New(jsonResp)
 	}
 
-	return valAsbytes, nil											//send it onward
+	return valAsbytes, nil //send it onward
 }
 
 // ============================================================================================================================
@@ -132,14 +115,15 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 // ============================================================================================================================
 func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	var addVal, valueAsBytes, value
+	var addVal, value int
+	var valueAsBytes []byte
 	var err error
 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
-	addVal,err = strconv.Atoi(args[0])
+	addVal, err = strconv.Atoi(args[0])
 	if err != nil {
 		return nil, errors.New("Expecting integer value as parameter")
 	}
@@ -150,7 +134,10 @@ func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) (
 		return nil, errors.New("Failed to get value from state")
 	}
 
-	value = strconv.Atoi(string(valueAsBytes))
+	value, err = strconv.Atoi(string(valueAsBytes))
+	if err != nil {
+		return nil, errors.New("Expecting integer value as parameter")
+	}
 
 	value += addVal
 
@@ -168,14 +155,15 @@ func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) (
 // ============================================================================================================================
 func (t *SimpleChaincode) subtract(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	var subVal, valueAsBytes, value
+	var subVal, value int
+	var valueAsBytes []byte
 	var err error
 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
-	subVal,err = strconv.Atoi(args[0])
+	subVal, err = strconv.Atoi(args[0])
 	if err != nil {
 		return nil, errors.New("Expecting integer value as parameter")
 	}
@@ -186,7 +174,10 @@ func (t *SimpleChaincode) subtract(stub shim.ChaincodeStubInterface, args []stri
 		return nil, errors.New("Failed to get value from state")
 	}
 
-	value = strconv.Atoi(string(valueAsBytes))
+	value, err = strconv.Atoi(string(valueAsBytes))
+	if err != nil {
+		return nil, errors.New("Expecting integer value as parameter")
+	}
 
 	value -= subVal
 
