@@ -8,6 +8,11 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
+
+//[CLAUSE] - conditions for execution
+//[PERFORMANCE] - execution
+
+
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
 }
@@ -136,12 +141,18 @@ func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) (
 		return nil, errors.New("Expecting integer value as parameter")
 	}
 
-	value += addVal
+	// [CLAUSE]
+	if addVal > 0 {
 
-	err = stub.PutState("abc", []byte(strconv.Itoa(value)))
+		// [PERFORMANCE]
+		value += addVal
 
-	if err != nil {
-		return nil, err
+		// [PERFORMANCE]
+		err = stub.PutState("abc", []byte(strconv.Itoa(value)))
+
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return nil, nil
@@ -176,12 +187,19 @@ func (t *SimpleChaincode) subtract(stub shim.ChaincodeStubInterface, args []stri
 		return nil, errors.New("Expecting integer value as parameter")
 	}
 
-	value -= subVal
+	// [CLAUSE]
+	if subVal > 0 {
 
-	err = stub.PutState("abc", []byte(strconv.Itoa(value)))
+		// [PERFORMANCE]
+		value -= subVal
 
-	if err != nil {
-		return nil, err
+		// [PERFORMANCE]
+		err = stub.PutState("abc", []byte(strconv.Itoa(value)))
+
+		if err != nil {
+			return nil, err
+		}
+
 	}
 
 	return nil, nil
