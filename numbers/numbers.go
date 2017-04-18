@@ -8,11 +8,6 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-
-//[CLAUSE] - conditions for execution
-//[PERFORMANCE] - execution
-
-
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
 }
