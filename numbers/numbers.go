@@ -141,8 +141,7 @@ func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) (
 
 		// [PERFORMANCE]
 		value += addVal
-
-		// [PERFORMANCE]
+		
 		err = stub.PutState("abc", []byte(strconv.Itoa(value)))
 
 		if err != nil {
@@ -188,7 +187,6 @@ func (t *SimpleChaincode) subtract(stub shim.ChaincodeStubInterface, args []stri
 		// [PERFORMANCE]
 		value -= subVal
 
-		// [PERFORMANCE]
 		err = stub.PutState("abc", []byte(strconv.Itoa(value)))
 
 		if err != nil {
