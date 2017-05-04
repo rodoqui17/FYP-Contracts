@@ -265,7 +265,7 @@ func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []
 	owner := c.Owner
 
 	// [CLAUSE]
-	if caller == c.Owner c.Scrapped = "False" {
+	if caller == c.Owner && c.Scrapped = "False" {
 
 		//[PERFORMANCE]
 		c.Reg = args[1]
@@ -316,7 +316,7 @@ func (t *SimpleChaincode) transfer_car(stub shim.ChaincodeStubInterface, args []
 	caller := c.Owner
 
 	// [CLAUSE]
-	if caller == c.Owner c.Scrapped = "False" {
+	if caller == c.Owner && c.Scrapped = "False" {
 
 		//[PERFORMANCE]
 		c.Owner = args[1]
