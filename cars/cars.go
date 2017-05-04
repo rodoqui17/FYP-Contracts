@@ -126,13 +126,13 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 
 func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	var c Car
+	//var c Car
 
 	bytes, err := stub.GetState(args[0]);
 	if err != nil {	return nil, err }
 
-	err = json.Unmarshal(bytes, &c);
-	if err != nil {	return nil, err }
+	// err = json.Unmarshal(bytes, &c);
+	// if err != nil {	return nil, err }
 
 	return bytes, nil
 }
