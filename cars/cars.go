@@ -124,15 +124,15 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 // }
 
 
-func (t * Chaincode) get_car(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t * Chaincode) get_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var c Car
 
 	bytes, err := stub.GetState(arg[0]);
-	if err != nil {	return c, errors.New("Error retrieving vehicle with v5cID = " + arg[0]) }
+	if err != nil {	return nil, errors.New("Error retrieving vehicle with v5cID = " + arg[0]) }
 
 	err = json.Unmarshal(bytes, &c)	;
-	if err != nil {	return c, errors.New("Corrupt vehicle record")	}
+	if err != nil {	return nil, errors.New("Corrupt vehicle record")	}
 
 	return bytes, nil
 }
