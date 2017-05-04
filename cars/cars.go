@@ -126,11 +126,13 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 
 func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
+	var c Car
+
 	bytes, err := stub.GetState(args[0]);
 	if err != nil {	return nil, err }
 
-	// err = json.Unmarshal(bytes, &c);
-	// if err != nil {	return nil, err }
+	err = json.Unmarshal(bytes, &c);
+	if err != nil {	return nil, err }
 
 	return bytes, nil
 }
@@ -190,18 +192,17 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 
 	var err error
 	var c Car
+	manufacturer := "Ford"
+	caller := "Ford"
 
 	if len(args) != 3 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 3.")
 	}
 
-	manufacturer := "Ford"
-	caller := "Ford"
-
 	v5c_ID         := "\"v5cID\":\""+args[0]+"\", "
 	model          := "\"Model\":\""+args[1]+"\", "
 	reg            := "\"Reg\":\"UNDEFINED\", "
-	owner          := "\"Owner\":\""+manufacturer+"\", "
+	owner          := "\"Owner\":"+manufacturer+", "
 	colour         := "\"Colour\":\""+args[2]+"\", "
 	scrapped       := "\"Scrapped\":false"
 
