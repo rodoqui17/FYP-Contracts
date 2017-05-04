@@ -128,7 +128,7 @@ func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []stri
 
 	var c Car
 
-	bytes, err := stub.GetState(arg[0]);
+	bytes, err := stub.GetState(args[0]);
 	if err != nil {	return nil, err }
 
 	err = json.Unmarshal(bytes, &c);
@@ -200,11 +200,11 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	manufacturer := "Ford"
 	caller := "Ford"
 
-	v5c_ID         := "\"v5cID\":\""+arg[0]+"\", "
-	model          := "\"Model\":\""+arg[1]+"\", "
+	v5c_ID         := "\"v5cID\":\""+args[0]+"\", "
+	model          := "\"Model\":\""+args[1]+"\", "
 	reg            := "\"Reg\":\"UNDEFINED\", "
 	owner          := "\"Owner\":\""+make+"\", "
-	colour         := "\"Colour\":\""+arg[2]+"\", "
+	colour         := "\"Colour\":\""+args[2]+"\", "
 	scrapped       := "\"Scrapped\":false"
 
 	car_json := "{"+v5c_ID+model+reg+owner+colour+scrapped+"}" // Concatenates the variables to create the total JSON object
