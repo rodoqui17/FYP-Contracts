@@ -131,8 +131,8 @@ func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []stri
 	bytes, err := stub.GetState(args[0]);
 	if err != nil {	return nil, err }
 
-	err = json.Unmarshal(bytes, &c);
-	if err != nil {	return nil, err }
+	// err = json.Unmarshal(bytes, &c);
+	// if err != nil {	return nil, err }
 
 	return bytes, nil
 }
