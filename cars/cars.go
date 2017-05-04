@@ -203,7 +203,7 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	v5c_ID         := "\"v5cID\":\""+args[0]+"\", "
 	model          := "\"Model\":\""+args[1]+"\", "
 	reg            := "\"Reg\":\"UNDEFINED\", "
-	owner          := "\"Owner\":\""+make+"\", "
+	owner          := "\"Owner\":\""+manufacturer+"\", "
 	colour         := "\"Colour\":\""+args[2]+"\", "
 	scrapped       := "\"Scrapped\":false"
 
