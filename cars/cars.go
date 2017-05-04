@@ -235,6 +235,163 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	return nil, nil
 }
 
+func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	//Args	0						1
+	//			v5c_ID			reg
+
+	var err error
+	var c Car
+	var new_bytes []byte
+
+	caller := "Ford"
+
+	if len(args) != 2 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 2.")
+	}
+
+	bytes, err := stub.GetState(args[0]);
+	if err != nil {
+		fmt.Println("Get state error")
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &c);
+	if err != nil {
+		fmt.Println("Unmarshal error")
+		return nil, err
+	}
+
+	owner := c.Owner
+
+	// [CLAUSE]
+	if caller == c.Owner c.Scrapped = "False" {
+
+		//[PERFORMANCE]
+		c.Reg = args[1]
+
+		new_bytes, err = json.Marshal(c)
+		if err != nil {
+			fmt.Println("Marshal error")
+			return nil, errors.New("Error creating car record")
+		}
+
+		fmt.Println("car object is now " + new_bytes)
+
+		err = stub.PutState(c.V5cID, new_bytes)
+		if err != nil {
+			fmt.Println("Put state error")
+			return nil, err
+		}
+	}
+
+	return nil, nil
+}
+
+func (t *SimpleChaincode) transfer_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	//Args	0						1
+	//			v5c_ID			new_owner
+
+	var err error
+	var c Car
+	var new_bytes []byte
+
+	if len(args) != 2 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 2.")
+	}
+
+	bytes, err := stub.GetState(args[0]);
+	if err != nil {
+		fmt.Println("Get state error")
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &c);
+	if err != nil {
+		fmt.Println("Unmarshal error")
+		return nil, err
+	}
+
+	caller := c.Owner
+
+	// [CLAUSE]
+	if caller == c.Owner c.Scrapped = "False" {
+
+		//[PERFORMANCE]
+		c.Owner = args[1]
+
+		new_bytes, err = json.Marshal(c)
+		if err != nil {
+			fmt.Println("Marshal error")
+			return nil, errors.New("Error creating car record")
+		}
+
+		fmt.Println("car object is now " + new_bytes)
+
+		err = stub.PutState(c.V5cID, new_bytes)
+		if err != nil {
+			fmt.Println("Put state error")
+			return nil, err
+		}
+	}
+
+	return nil, nil
+}
+
+func (t *SimpleChaincode) scrap_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	//Args	0
+	//			v5c_ID
+
+	var err error
+	var c Car
+	var new_bytes []byte
+
+	if len(args) != 2 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 2.")
+	}
+
+	bytes, err := stub.GetState(args[0]);
+	if err != nil {
+		fmt.Println("Get state error")
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &c);
+	if err != nil {
+		fmt.Println("Unmarshal error")
+		return nil, err
+	}
+
+	caller := c.Owner
+
+	// [CLAUSE]
+	if caller == c.Owner && c.Scrapped = "False" {
+
+		//[PERFORMANCE]
+		c.Scrapped = "True"
+
+		new_bytes, err = json.Marshal(c)
+		if err != nil {
+			fmt.Println("Marshal error")
+			return nil, errors.New("Error creating car record")
+		}
+
+		fmt.Println("car object is now " + new_bytes)
+
+		err = stub.PutState(c.V5cID, new_bytes)
+		if err != nil {
+			fmt.Println("Put state error")
+			return nil, err
+		}
+	}
+
+	return nil, nil
+}
+
+
+
 // ============================================================================================================================
 // Subtract - subtract variable from value in chaincode state
 // ============================================================================================================================
