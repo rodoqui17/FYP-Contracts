@@ -65,11 +65,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.Init(stub, "init", args)
 	} else if function == "create_car" {
 		return t.create_car(stub, args)
-	} else if function == "add" { //Adds a number to current value
-		return t.add(stub, args)
-	} else if function == "subtract" { //Subtracts a number from current value
-		return t.subtract(stub, args)
-	} else if function == "register_car" {
+	}  else if function == "register_car" {
 		return t.register_car(stub, args)
 	} else if function == "transfer_car" {
 		return t.transfer_car(stub, args)
@@ -89,45 +85,13 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "read" { //read a variable
-		return t.read(stub, args)
-	} else if function == "get_car" {
+	if function == "get_car" {
 		return t.get_car(stub, args)
 	}
 	fmt.Println("query did not find func: " + function) //error
 
 	return nil, errors.New("Received unknown function query")
 }
-
-// ============================================================================================================================
-// Read - read a variable from chaincode state
-// ============================================================================================================================
-func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var name, jsonResp string
-	var err error
-
-	valAsbytes, err := stub.GetState("abc") //get the var from chaincode state
-	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to get state for " + name + "\"}"
-		return nil, errors.New(jsonResp)
-	}
-
-	return valAsbytes, nil //send it onward
-}
-
-
-
-
-// func (t *Chaincode) save_changes(stub *shim.ChaincodeStub, v Vehicle) (bool, error) {
-//
-// 	bytes, err := json.Marshal(v)
-// 	if err != nil { return false, errors.New("Error creating vehicle record") }
-//
-// 	err = stub.PutState(v.V5cID, bytes)
-// 	if err != nil { return false, err }
-//
-// 	return true, nil
-// }
 
 
 func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -142,54 +106,6 @@ func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []stri
 
 	return bytes, nil
 }
-
-
-// ============================================================================================================================
-// Add - add variable to value in chaincode state
-// ============================================================================================================================
-func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
-	var addVal, value int
-	var valueAsBytes []byte
-	var err error
-
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
-
-	addVal, err = strconv.Atoi(args[0])
-	if err != nil {
-		return nil, errors.New("Expecting integer value as parameter")
-	}
-
-	//Get the value in state
-	valueAsBytes, err = stub.GetState("abc")
-	if err != nil {
-		return nil, errors.New("Failed to get value from state")
-	}
-
-	value, err = strconv.Atoi(string(valueAsBytes))
-	if err != nil {
-		return nil, errors.New("Expecting integer value as parameter")
-	}
-
-	// [CLAUSE]
-	if addVal > 0 {
-
-		// [PERFORMANCE]
-		value += addVal
-
-		err = stub.PutState("abc", []byte(strconv.Itoa(value)))
-
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return nil, nil
-}
-
-
 
 func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
@@ -271,7 +187,7 @@ func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []
 	fmt.Println("car object is now " + string(new_bytes) + caller)
 
 	// [CLAUSE]
-	if caller == c.Owner && c.Scrapped == "False" {
+	if caller == c.Owner {
 
 		//[PERFORMANCE]
 		c.Reg = args[1]
@@ -324,7 +240,7 @@ func (t *SimpleChaincode) transfer_car(stub shim.ChaincodeStubInterface, args []
 	fmt.Println("car object is now " + string(new_bytes))
 
 	// [CLAUSE]
-	if caller == c.Owner && c.Scrapped == "False" {
+	if caller == c.Owner {
 
 		//[PERFORMANCE]
 		c.Owner = args[1]
@@ -375,7 +291,7 @@ func (t *SimpleChaincode) scrap_car(stub shim.ChaincodeStubInterface, args []str
 	caller := c.Owner
 
 	// [CLAUSE]
-	if caller == c.Owner && c.Scrapped == "False" {
+	if caller == c.Owner {
 
 		//[PERFORMANCE]
 		c.Scrapped = "True"
@@ -393,54 +309,6 @@ func (t *SimpleChaincode) scrap_car(stub shim.ChaincodeStubInterface, args []str
 			fmt.Println("Put state error")
 			return nil, err
 		}
-	}
-
-	return nil, nil
-}
-
-
-
-// ============================================================================================================================
-// Subtract - subtract variable from value in chaincode state
-// ============================================================================================================================
-func (t *SimpleChaincode) subtract(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
-	var subVal, value int
-	var valueAsBytes []byte
-	var err error
-
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
-
-	subVal, err = strconv.Atoi(args[0])
-	if err != nil {
-		return nil, errors.New("Expecting integer value as parameter")
-	}
-
-	//Get the value in state
-	valueAsBytes, err = stub.GetState("abc")
-	if err != nil {
-		return nil, errors.New("Failed to get value from state")
-	}
-
-	value, err = strconv.Atoi(string(valueAsBytes))
-	if err != nil {
-		return nil, errors.New("Expecting integer value as parameter")
-	}
-
-	// [CLAUSE]
-	if subVal > 0 {
-
-		// [PERFORMANCE]
-		value -= subVal
-
-		err = stub.PutState("abc", []byte(strconv.Itoa(value)))
-
-		if err != nil {
-			return nil, err
-		}
-
 	}
 
 	return nil, nil
