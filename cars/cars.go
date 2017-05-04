@@ -124,7 +124,7 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 // }
 
 
-func (t * Chaincode) get_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var c Car
 
