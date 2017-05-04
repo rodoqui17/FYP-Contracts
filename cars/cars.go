@@ -69,6 +69,12 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.add(stub, args)
 	} else if function == "subtract" { //Subtracts a number from current value
 		return t.subtract(stub, args)
+	} else if function == "register_car" {
+		return t.register_car(stub, args)
+	} else if function == "transfer_car" {
+		return t.transfer_car(stub, args)
+	} else if function == "scrap_car" {
+		return t.scrap_car(stub, args)
 	}
 
 	fmt.Println("invoke did not find func: " + function) //error
@@ -87,12 +93,6 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.read(stub, args)
 	} else if function == "get_car" {
 		return t.get_car(stub, args)
-	} else if function == "register_car" {
-		return t.register_car(stub, args)
-	} else if function == "transfer_car" {
-		return t.transfer_car(stub, args)
-	} else if function == "scrap_car" {
-		return t.scrap_car(stub, args)
 	}
 	fmt.Println("query did not find func: " + function) //error
 
