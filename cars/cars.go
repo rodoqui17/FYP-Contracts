@@ -208,17 +208,28 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 
 	car_json := "{"+v5c_ID+model+reg+owner+colour+scrapped+"}" // Concatenates the variables to create the total JSON object
 
+	fmt.Println("car object is  " + car_json)
+
 	//Convert to a car object
 	err = json.Unmarshal([]byte(car_json), &c)
-	if err != nil { return nil, errors.New("Invalid JSON object") }
+	if err != nil {
+		fmt.Println("Unmarshal error")
+		return nil, errors.New("Invalid JSON object")
+	}
 
 	bytes, err := json.Marshal(c)
-	if err != nil { return nil, errors.New("Error creating car record") }
+	if err != nil {
+		fmt.Println("Marshal error")
+		return nil, errors.New("Error creating car record")
+	}
 
 	// [CLAUSE]
 	if caller == manufacturer {
 		err = stub.PutState(c.V5cID, bytes)
-		if err != nil { return nil, err }
+		if err != nil {
+			fmt.Println("Put state error") 
+			return nil, err
+		}
 	}
 
 	return nil, nil
