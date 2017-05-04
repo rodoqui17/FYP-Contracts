@@ -262,6 +262,8 @@ func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []
 
 	caller := c.Owner
 
+	fmt.Println("car object is now " + string(new_bytes) + caller)
+
 	// [CLAUSE]
 	if caller == c.Owner && c.Scrapped == "False" {
 
