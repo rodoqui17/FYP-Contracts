@@ -209,13 +209,6 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 
 	car_json := "{"+v5c_ID+model+reg+owner+colour+scrapped+"}" // Concatenates the variables to create the total JSON object
 
-	V5cID 					string `json:"v5cID"`
-	Model           string `json:"model"`
-	Reg             string `json:"reg"`
-	Owner           string `json:"owner"`
-	Colour          string `json:"colour"`
-	Scrapped        string `json:"scrapped"`
-
 	//Convert to a car object
 	err = json.Unmarshal([]byte(car_json), &c)
 	if err != nil { return nil, errors.New("Invalid JSON object") }
