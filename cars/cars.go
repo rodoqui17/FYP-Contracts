@@ -113,8 +113,8 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 
 	var err error
 	var c Car
-	manufacturer := "Ford"
-	caller := "Ford"
+	manufacturer := "BMW"
+	caller := "BMW"
 
 	if len(args) != 3 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 3.")
