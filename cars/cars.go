@@ -202,7 +202,7 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	v5c_ID         := "\"v5cID\":\""+args[0]+"\", "
 	model          := "\"Model\":\""+args[1]+"\", "
 	reg            := "\"Reg\":\"UNDEFINED\", "
-	owner          := "\"Owner\":"+manufacturer+", "
+	owner          := "\"Owner\":\""+manufacturer+"\", "
 	colour         := "\"Colour\":\""+args[2]+"\", "
 	scrapped       := "\"Scrapped\":\"False\""
 
@@ -227,7 +227,7 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	if caller == manufacturer {
 		err = stub.PutState(c.V5cID, bytes)
 		if err != nil {
-			fmt.Println("Put state error") 
+			fmt.Println("Put state error")
 			return nil, err
 		}
 	}
