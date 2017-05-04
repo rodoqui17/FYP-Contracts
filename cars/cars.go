@@ -129,10 +129,10 @@ func (t * SimpleChaincode) get_car(stub shim.ChaincodeStubInterface, args []stri
 	var c Car
 
 	bytes, err := stub.GetState(arg[0]);
-	if err != nil {	return nil, errors.New("Error retrieving vehicle with v5cID = " + arg[0]) }
+	if err != nil {	return nil, err }
 
-	err = json.Unmarshal(bytes, &c)	;
-	if err != nil {	return nil, errors.New("Corrupt vehicle record")	}
+	err = json.Unmarshal(bytes, &c);
+	if err != nil {	return nil, err }
 
 	return bytes, nil
 }
@@ -214,7 +214,7 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	if err != nil { return nil, errors.New("Invalid JSON object") }
 
 	bytes, err := json.Marshal(c)
-	if err != nil { return false, errors.New("Error creating car record") }
+	if err != nil { return nil, errors.New("Error creating car record") }
 
 	// [CLAUSE]
 	if caller == manufacturer {
