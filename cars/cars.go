@@ -276,7 +276,7 @@ func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []
 			return nil, errors.New("Error creating car record")
 		}
 
-		fmt.Println("car object is now " + new_bytes)
+		fmt.Println("car object is now " + string(new_bytes))
 
 		err = stub.PutState(c.V5cID, new_bytes)
 		if err != nil {
@@ -327,7 +327,7 @@ func (t *SimpleChaincode) transfer_car(stub shim.ChaincodeStubInterface, args []
 			return nil, errors.New("Error creating car record")
 		}
 
-		fmt.Println("car object is now " + new_bytes)
+		fmt.Println("car object is now " + string(new_bytes))
 
 		err = stub.PutState(c.V5cID, new_bytes)
 		if err != nil {
@@ -378,7 +378,7 @@ func (t *SimpleChaincode) scrap_car(stub shim.ChaincodeStubInterface, args []str
 			return nil, errors.New("Error creating car record")
 		}
 
-		fmt.Println("car object is now " + new_bytes)
+		fmt.Println("car object is now " + string(new_bytes))
 
 		err = stub.PutState(c.V5cID, new_bytes)
 		if err != nil {
