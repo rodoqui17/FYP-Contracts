@@ -204,7 +204,7 @@ func (t *SimpleChaincode) create_car(stub shim.ChaincodeStubInterface, args []st
 	reg            := "\"Reg\":\"UNDEFINED\", "
 	owner          := "\"Owner\":"+manufacturer+", "
 	colour         := "\"Colour\":\""+args[2]+"\", "
-	scrapped       := "\"Scrapped\":false"
+	scrapped       := "\"Scrapped\":\"False\""
 
 	car_json := "{"+v5c_ID+model+reg+owner+colour+scrapped+"}" // Concatenates the variables to create the total JSON object
 
