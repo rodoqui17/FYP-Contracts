@@ -244,8 +244,6 @@ func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []
 	var c Car
 	var new_bytes []byte
 
-	caller := "Ford"
-
 	if len(args) != 2 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2.")
 	}
@@ -262,7 +260,7 @@ func (t *SimpleChaincode) register_car(stub shim.ChaincodeStubInterface, args []
 		return nil, err
 	}
 
-	owner := c.Owner
+	caller := c.Owner
 
 	// [CLAUSE]
 	if caller == c.Owner && c.Scrapped == "False" {
